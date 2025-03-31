@@ -4,7 +4,8 @@
   "description": "NodeApp",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/matiliendogit/App-Usuarios/issues"
   },
-  "homepage": "https://github.com/matiliendogit/App-Usuarios#readme"
+  "homepage": "https://github.com/matiliendogit/App-Usuarios#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
 }
