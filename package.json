@@ -6,7 +6,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node ./src/app.js"
+    "dev": "node --watch file:///D:/Proyectos/Alkemy-CITIA/app-usuarios/src/app.js"
+
   },
   "repository": {
     "type": "git",
