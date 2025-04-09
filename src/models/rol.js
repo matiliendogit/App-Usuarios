@@ -21,5 +21,13 @@ export default (sequelize, DataTypes) => {
     sequelize,
     modelName: 'rol',
   });
+
+  rol.associate = function (models) {
+    rol.belongsToMany(models.usuario, {
+      through: 'usuario_rol',
+      foreignKey: 'rolId',
+      otherKey: 'usuarioId',
+    });
+  };
   return rol;
 };

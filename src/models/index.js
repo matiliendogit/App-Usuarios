@@ -1,8 +1,11 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL  } from 'url';
 import Sequelize from 'sequelize';
 import process from 'process';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,10 +13,8 @@ const __dirname = path.dirname(__filename);
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 
-// 👇 Lectura segura del JSON sin 'assert'
-const configPath = path.resolve(__dirname, '../config/config.json');
-const configJSON = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-const config = configJSON[env];
+import configFile from '../config/config.js';
+const config = configFile[env];
 
 const db = {};
 
@@ -24,23 +25,21 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-// 👇 Carga dinámica de modelos
-const files = fs.readdirSync(__dirname).filter(file => {
-  return (
-    file.indexOf('.') !== 0 &&
-    file !== basename &&
-    file.slice(-3) === '.js' &&
-    file.indexOf('.test.js') === -1
-  );
-});
+// Carga dinámica de modelos
+const modelFiles = fs
+  .readdirSync(__dirname)
+  .filter(file => file !== basename && file.endsWith('.js'));
 
-for (const file of files) {
-  const { default: modelDefiner } = await import(path.join(__dirname, file));
-  const model = modelDefiner(sequelize, Sequelize.DataTypes);
+for (const file of modelFiles) {
+  const fullPath = path.join(__dirname, file);
+  const fileUrl = pathToFileURL(fullPath).href;
+
+  const { default: defineModel } = await import(fileUrl);
+  const model = defineModel(sequelize, Sequelize.DataTypes);
   db[model.name] = model;
 }
 
-// 👇 Relaciones entre modelos (si las hay)
+// Relaciones entre modelos 
 for (const modelName of Object.keys(db)) {
   if (db[modelName].associate) {
     db[modelName].associate(db);

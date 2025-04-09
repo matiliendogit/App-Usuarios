@@ -1,4 +1,10 @@
 import db from '../models/index.js';
+try {
+    await db.sequelize.authenticate();
+    console.log('✅ Conexión a la base de datos establecida correctamente.');
+  } catch (error) {
+    console.error('❌ Error al conectar con la base de datos:', error);
+  }
 const { usuario, rol } = db;
 import { hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
