@@ -1,8 +1,8 @@
-'use strict';
-import { Model } from 'sequelize';
+"use strict";
+import { Model } from "sequelize";
 
 export default (sequelize, DataTypes) => {
-  class usuario extends Model {
+  class Usuario extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,31 +12,39 @@ export default (sequelize, DataTypes) => {
       // define association here
     }
   }
-  usuario.init({
-    nombre: {
+  Usuario.init(
+    {
+      nombre: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-    email: {
+      email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
-    contraseña: {
+      contraseña: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-  }, {
-    sequelize,
-    modelName: 'usuario',
-  });
+    },
+    {
+      sequelize,
+      modelName: "Usuario",
+      tableName: "usuarios",
+      timestamps: true,
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    }
+  );
 
-  usuario.associate = function (models) {
-    usuario.belongsToMany(models.rol, {
-      through: 'usuario_rol',
-      foreignKey: 'usuarioId',
-      otherKey: 'rolId',
+  Usuario.associate = function (models) {
+    Usuario.belongsToMany(models.rol, {
+      through: "usuarios_roles",
+      foreignKey: "usuario_id",
+      otherKey: "rol_id",
+      as: "roles",
     });
   };
-  return usuario;
+  return Usuario;
 };

@@ -1,8 +1,8 @@
 "use strict";
-
 import { Model } from "sequelize";
+
 export default (sequelize, DataTypes) => {
-  class Rol extends Model {
+  class UsuarioRol extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,12 +12,15 @@ export default (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Rol.init(
+  UsuarioRol.init(
     {
-      nombre: {
-        type: DataTypes.STRING,
+      usuario_id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
+      },
+      rol_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       created_at: {
         type: DataTypes.DATE,
@@ -31,26 +34,10 @@ export default (sequelize, DataTypes) => {
       },
     },
     {
-      sequelize,
-      modelName: "Rol",
-      tableName: "roles",
+      modelName: "UsuarioRol",
+      tableName: "usuarios_roles",
       timestamps: true,
     }
   );
-
-  Rol.associate = function (models) {
-    Rol.belongsToMany(models.usuario, {
-      through: "usuarios_roles",
-      foreignKey: "rol_id",
-      otherKey: "usuario_id",
-      as: "usuarios",
-    });
-    Rol.belongsToMany(models.Permiso, {
-      through: "roles_permisos",
-      foreignKey: "rol_id",
-      otherKey: "permiso_id",
-      as: "permisos",
-    });
-  };
-  return Rol;
+  return UsuarioRol;
 };

@@ -7,6 +7,8 @@ try {
 }
 
 const { usuario } = db;
+
+//Obtener todos los usuarios
 export const getAllUsers = async (req, res) => {
     try {
         const users = await usuario.findAll();
@@ -16,6 +18,8 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ error: 'Error al obtener los usuarios' });
     }
   };
+
+// Obetener un usuario por ID
 export const getUserById = async (req, res) =>{
   req.params.id = parseInt(req.params.id); 
 
